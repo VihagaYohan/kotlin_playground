@@ -8,8 +8,8 @@ fun main() {
     println(question1.toString())
     println("${StudentProgress.answered} of ${StudentProgress.total} answered")
     println(Quiz.total)
-    println(Quiz.progressText)
-    Quiz.printProgressBar()
+    // println(Quiz.progressText)
+    // Quiz.printProgressBar()
 }
 
 class House(color: String){
