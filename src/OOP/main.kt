@@ -1,8 +1,15 @@
 package OOP
 
 fun main() {
-    val house = House(1,3.4,"red",43.3)
-    house.simplePrompt()
+    val question1 = Question<String>("Quoth the raven ___", "nevermore", Difficulty.MEDIUM)
+    val question2 = Question<Boolean>("The sky is green. True or false", false, Difficulty.EASY)
+    val question3 = Question<Int>("How many days are there between full moons?", 28, Difficulty.HARD)
+
+    println(question1.toString())
+    println("${StudentProgress.answered} of ${StudentProgress.total} answered")
+    println(Quiz.total)
+    println(Quiz.progressText)
+    Quiz.printProgressBar()
 }
 
 class House(color: String){
