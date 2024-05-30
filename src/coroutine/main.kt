@@ -25,28 +25,77 @@ import kotlin.system.measureTimeMillis
 //}
 
 // Asynchronous code with launch
+//fun main() {
+//    val time = measureTimeMillis {
+//        println("Weather forecast")
+//        runBlocking {
+//            launch {
+//                printForecast()
+//            }
+//            launch {
+//                printTemperature()
+//            }
+//            println("Have a good day!")
+//        }
+//    }
+//    println("Execution time: ${time / 1000.0} seconds")
+//}
+//
+//suspend fun printForecast() {
+//    delay(1000)
+//    println("Sunny")
+//}
+//
+//suspend fun printTemperature() {
+//    delay(1000)
+//    println("30\u00b0C")
+//}
+
+// Asynchronous code - Async & Await
 fun main() {
     val time = measureTimeMillis {
         println("Weather forecast")
         runBlocking {
-            launch {
-                printForecast()
+//            val forecast: Deferred<String> = async {
+//                getForecast()
+//            }
+//            val temerature: Deferred<String> = async {
+//                getTemperature()
+//            }
+            try {
+                println(getWeatherReport())
+            } catch(e: AssertionError) {
+             println("Caught exception in runBlocking(): $e")
+             println("Report unavailable at this time")
             }
-            launch {
-                printTemperature()
-            }
+//            println("${forecast.await()} ${temerature.await()}")
             println("Have a good day!")
         }
     }
     println("Execution time: ${time / 1000.0} seconds")
 }
 
-suspend fun printForecast() {
+suspend fun getForecast(): String {
     delay(1000)
-    println("Sunny")
+    return "Sunny"
 }
 
-suspend fun printTemperature() {
+suspend fun getTemperature(): String {
     delay(1000)
-    println("30\u00b0C")
+    throw AssertionError("Temperature is invalid")
+    return "30\u00b0C"
+}
+
+suspend fun getWeatherReport() = coroutineScope {
+    val forecast = async { getForecast()}
+    val temperature = async {
+        try {
+            getTemperature()
+        } catch(e: AssertionError) {
+            println("Caught exception $e")
+            "{No temprature found}"
+            }
+        }
+    // temprature.cancel()
+    "${forecast.await()} ${temperature.await()}"
 }
